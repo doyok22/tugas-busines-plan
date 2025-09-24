@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSakti - Aplikasi AI untuk Petani Indonesia</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        /* Reset dan Base Styles */
+        :root {
+            --primary-green: #2F8F4E;
+            --primary-green-dark: #1B5E20;
+            --accent-yellow: #F6C85F;
+            --accent-orange: #E67E22;
+            --background-cream: #FFF9F0;
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+            --gray-light: #F5F5F5;
+            --gray-medium: #E0E0E0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            
+            /* Dark Mode Variables */
+            --bg-dark: #1a1a1a;
+            --card-dark: #2d2d2d;
+            --text-dark-mode: #f0f0f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Gill Sans', 'Gill Sans MT',  'Trebuchet MS', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-cream);
+            transition: var(--transition);
+        }
+        
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark-mode);
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            font-weight: 600;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary-green);
+            transition: var(--transition);
+        }
+        
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+            color: var(--text-light);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--accent-yellow), #e6b84c);
+            color: var(--text-dark);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .section {
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-green);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-yellow));
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+        
+        .leaf-decoration {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .leaf-decoration.left {
+            left: -50px;
+            top: 50px;
+        }
+        
+        .leaf-decoration.right {
+            right: -50px;
+            bottom: 50px;
+            transform: rotate(180deg);
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--primary-green-dark);
+            color: var(--text-light);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .dark-mode header {
+            background-color: var(--card-dark);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 0.5rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-menu a {
+            color: var(--text-light);
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-yellow);
+            transition: var(--transition);
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+        }
+        
+        .theme-toggle {
+            background: none;
+            color: var(--text-light);
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background:  url('1.png');
+            background-size: cover;
+            background-position: left;
+            color: var(--text-light);
+            text-align: left;
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        
+             background-position: left;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            position: left;
+            max-width: 600px;
+            text-align: left;
+            margin: 0 0 2rem 0;
+            text-shadow: 0 1px 2px rgba(182, 226, 47, 0.3);
+            color: #f7f8f6;
+            position: left;
+        }
+        
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .dark-mode .feature-card {
+            background-color: var(--card-dark);
+            color: var(--text-dark-mode);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+            border-radius: 50%;
+            color: white;
+        }
+        
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* How It Works Section */
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-yellow), #e6b84c);
+            color: var(--text-dark);
+            border-radius: 50%;
+            line-height: 60px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            background-color: var(--gray-light);
+        }
+        
+        .dark-mode .testimonials {
+            background-color: var(--card-dark);
+        }
+        
+        .testimonial-card {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 0 auto;
+            max-width: 600px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+        }
+        
+        .dark-mode .testimonial-card {
+            background-color: var(--bg-dark);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            position: relative;
+            padding: 0 1rem;
+        }
+        
+        .testimonial-text::before, .testimonial-text::after {
+            content: '"';
+            font-size: 3rem;
+            color: var(--primary-green);
+            opacity: 0.3;
+            position: absolute;
+        }
+        
+        .testimonial-text::before {
+            top: -1rem;
+            left: 0;
+        }
+        
+        .testimonial-text::after {
+            bottom: -2rem;
+            right: 0;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+        
+        /* Demo Banner */
+        .demo-banner {
+            background-color: var(--accent-yellow);
+            text-align: center;
+            padding: 1rem;
+            font-weight: bold;
+        }
+        
+        /* Demo App Styles */
+        .demo-app {
+            display: none;
+            background-color: var(--gray-light);
+            min-height: 100vh;
+        }
+        
+        .dark-mode .demo-app {
+            background-color: var(--bg-dark);
+        }
+        
+        .demo-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: var(--text-light);
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .dark-mode .demo-container {
+            background-color: var(--card-dark);
+            color: var(--text-dark-mode);
+        }
+        
+        .demo-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+            color: var(--text-light);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .demo-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem 0;
+            background-color: var(--text-light);
+            border-bottom: 1px solid var(--gray-medium);
+        }
+        
+        .dark-mode .demo-nav {
+            background-color: var(--card-dark);
+            border-bottom-color: #444;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.8rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .dark-mode .nav-item {
+            color: var(--text-dark-mode);
+        }
+        
+        .nav-item.active {
+            color: var(--primary-green);
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .demo-content {
+            padding: 1rem;
+            min-height: calc(100vh - 140px);
+        }
+        
+        .demo-section {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .demo-section.active {
+            display: block;
+        }
+        
+        .card {
+            background-color: var(--gray-light);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .dark-mode .card {
+            background-color: var(--bg-dark);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-medium);
+            transition: var(--transition);
+        }
+        
+        .dark-mode .task-item {
+            border-bottom-color: #444;
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        
+        .task-done {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .feature-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .dark-mode .feature-btn {
+            background-color: var(--card-dark);
+        }
+        
+        .feature-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .feature-btn-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--gray-medium);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .dark-mode .upload-area {
+            border-color: #555;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-green);
+            background-color: rgba(47, 143, 78, 0.05);
+        }
+        
+        .sample-images {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .sample-image {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .sample-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .sample-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .diagnosis-result {
+            display: none;
+            margin-top: 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(47, 143, 78, 0.2);
+            border-left: 4px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        .products-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .product-card {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .dark-mode .product-card {
+            background-color: var(--card-dark);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 150px;
+            background-color: var(--gray-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 1rem;
+        }
+        
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .star {
+            color: #FFD700;
+            margin-right: 2px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-heavy);
+            animation: slideUp 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .dark-mode .modal-content {
+            background-color: var(--card-dark);
+            color: var(--text-dark-mode);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .close-modal {
+            background: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+        
+        .dark-mode .close-modal {
+            color: var(--text-dark-mode);
+        }
+        
+        .close-modal:hover {
+            color: var(--primary-green);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .dark-mode .form-group input, 
+        .dark-mode .form-group textarea {
+            background-color: var(--bg-dark);
+            border-color: #555;
+            color: var(--text-dark-mode);
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 2px rgba(47, 143, 78, 0.2);
+        }
+        
+        .image-preview {
+            margin-top: 1rem;
+            display: none;
+            text-align: center;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .calendar-day {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .dark-mode .calendar-day {
+            background-color: var(--card-dark);
+        }
+        
+        .calendar-day.current {
+            background-color: var(--accent-yellow);
+            color: var(--text-dark);
+        }
+        
+        .calendar-task {
+            font-size: 0.7rem;
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            border-radius: 3px;
+            padding: 2px;
+            margin-top: 2px;
+        }
+        
+        .forum-posts {
+            margin-bottom: 1rem;
+        }
+        
+        .forum-post {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .dark-mode .forum-post {
+            background-color: var(--card-dark);
+        }
+        
+        .forum-post:hover {
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .post-author {
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            padding: 3rem 0 1rem;
+            transition: var(--transition);
+        }
+        
+        .dark-mode footer {
+            background-color: var(--card-dark);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: var(--accent-yellow);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-light);
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+            
+            .hero {
+                padding: 4rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+            
+            .nav-menu {
+                display: none;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: var(--primary-green);
+                flex-direction: column;
+                padding: 2rem;
+                transition: right 0.3s ease;
+                z-index: 101;
+            }
+            
+            .dark-mode .nav-menu {
+                background-color: var(--card-dark);
+            }
+            
+            .nav-menu.active {
+                display: flex;
+                right: 0;
+            }
+            
+            .nav-menu li {
+                margin: 0;
+                padding: 1rem 0;
+                text-align: left;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                z-index: 102;
+            }
+            
+            .steps {
+                flex-direction: column;
+            }
+            
+            .demo-container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        button:focus, a:focus {
+            outline: 2px solid var(--accent-yellow);
+            outline-offset: 2px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landing-page">
+        <!-- Header -->
+        <header>
+            <div class="container header-container">
+                <div class="logo">
+                    <span class="logo-icon" data-feather="leaf"></span>
+                    Agroverse
+                </div>
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span data-feather="menu"></span>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#features">Fitur</a></li>
+                    <li><a href="#how-it-works">Cara Kerja</a></li>
+                    <li><a href="#testimonials">Testimoni</a></li>
+                    <li><a href="#" id="try-demo">Coba Demo</a></li>
+                    <li>
+                        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                            <span data-feather="moon"></span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <h1>Agroverse</h1>
+                <p>Aplikasi AI untuk Petani Skala Kecil di Indonesia</p>
+                <button class="btn-primary" id="cta-demo">Coba Demo</button>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section" id="features">
+            <svg class="leaf-decoration left floating" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+            </svg>
+            <svg class="leaf-decoration right floating" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+            </svg>
+            <div class="container">
+                <h2 class="section-title">Fitur Utama Agroverse</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span data-feather="cloud"></span>
+                        </div>
+                        <h3>Ramalan Langit</h3>
+                        <p>Prediksi cuaca akurat untuk perencanaan aktivitas pertanian</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span data-feather="search"></span>
+                        </div>
+                        <h3>Scan & Sembuh</h3>
+                        <p>Diagnosa hama dan penyakit tanaman dengan teknologi AI</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span data-feather="calendar"></span>
+                        </div>
+                        <h3>Panduan Tanam</h3>
+                        <p>Kalender tanam dan panduan perawatan tanaman</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span data-feather="users"></span>
+                        </div>
+                        <h3>Forum Tani</h3>
+                        <p>Komunitas petani untuk berbagi pengalaman dan solusi</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span data-feather="shopping-cart"></span>
+                        </div>
+                        <h3>Pasar Panen</h3>
+                        <p>Marketplace untuk menjual hasil panen langsung</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="section" id="how-it-works">
+            <div class="container">
+                <h2 class="section-title">Bagaimana Cara Kerjanya?</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Unduh Aplikasi</h3>
+                        <p>Install Agroverse dari link</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Daftar Akun</h3>
+                        <p>Buat akun dengan data diri dan informasi lahan</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Gunakan Fitur</h3>
+                        <p>Manfaatkan semua fitur untuk meningkatkan hasil panen</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="section testimonials" id="testimonials">
+            <div class="container">
+                <h2 class="section-title">tujuan di buat?</h2>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"untuk membantu para pertanni agar lebih produktif dan efisien"</p>
+                    <p class="testimonial-author">- agar hasil lebih maksimal dan berkualitas</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Agroverse</h3>
+                        <p>Aplikasi AI untuk petani skala kecil di Indonesia.</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Kontak</h3>
+                        <ul class="footer-links">
+                            <li><a href="mailto:info@agrisakti.id">info:@doyoknih987.</a></li>
+                            <li><a href="mailto:info@agrisakti.id">info:@rubu_2.</a></li>
+                            <li><a href="mailto:info@agrisakti.id">info:@ezra.adyatma.</a></li>
+                            <li><a href="tel:+62123456789">+628 85829306033</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Tautan</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Kebijakan Privasi</a></li>
+                            <li><a href="#">Syarat & Ketentuan</a></li>
+                            <li><a href="#">Unduh Aplikasi</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 nexsus(utdi).</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Demo App -->
+    <div id="demo-app" class="demo-app">
+        <div class="demo-banner">
+            Mode Demo - Tidak membutuhkan koneksi internet
+        </div>
+        <div class="demo-container">
+            <div class="demo-header">
+                <div>
+                    <div id="village-name">Desa Sukamaju</div>
+                    <div id="weather-info">Hujan, 24°C</div>
+                </div>
+                <button id="back-to-landing" aria-label="Kembali ke halaman utama">
+                    <span data-feather="arrow-left"></span>
+                </button>
+            </div>
+            
+            <div class="demo-nav">
+                <div class="nav-item active" data-section="dashboard">
+                    <div class="nav-icon">
+                        <span data-feather="home"></span>
+                    </div>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-section="diagnosa">
+                    <div class="nav-icon">
+                        <span data-feather="search"></span>
+                    </div>
+                    <span>Diagnosa</span>
+                </div>
+                <div class="nav-item" data-section="marketplace">
+                    <div class="nav-icon">
+                        <span data-feather="shopping-cart"></span>
+                    </div>
+                    <span>Pasar Panen</span>
+                </div>
+                <div class="nav-item" data-section="kalender">
+                    <div class="nav-icon">
+                        <span data-feather="calendar"></span>
+                    </div>
+                    <span>Kalender</span>
+                </div>
+                <div class="nav-item" data-section="forum">
+                    <div class="nav-icon">
+                        <span data-feather="users"></span>
+                    </div>
+                    <span>Forum</span>
+                </div>
+            </div>
+            
+            <div class="demo-content">
+                <!-- Dashboard Section -->
+                <div class="demo-section active" id="dashboard-section">
+                    <h2>Dashboard</h2>
+                    
+                    <div class="card">
+                        <h3>Tugas Hari Ini</h3>
+                        <div id="tasks-list">
+                            <!-- Tasks will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Fitur Utama</h3>
+                        <div class="feature-grid">
+                            <div class="feature-btn" data-section="diagnosa">
+                                <div class="feature-btn-icon">
+                                    <span data-feather="search"></span>
+                                </div>
+                                <span>Scan & Sembuh</span>
+                            </div>
+                            <div class="feature-btn" data-section="kalender">
+                                <div class="feature-btn-icon">
+                                    <span data-feather="calendar"></span>
+                                </div>
+                                <span>Kalender Tanam</span>
+                            </div>
+                            <div class="feature-btn" data-section="forum">
+                                <div class="feature-btn-icon">
+                                    <span data-feather="users"></span>
+                                </div>
+                                <span>Forum Tani</span>
+                            </div>
+                            <div class="feature-btn" data-section="marketplace">
+                                <div class="feature-btn-icon">
+                                    <span data-feather="shopping-cart"></span>
+                                </div>
+                                <span>Pasar Panen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Diagnosa Section -->
+                <div class="demo-section" id="diagnosa-section">
+                    <h2>Scan & Sembuh</h2>
+                    
+                    <div class="card">
+                        <p>Unggah foto tanaman yang ingin didiagnosa:</p>
+                        <div class="upload-area" id="upload-area">
+                            <div class="upload-icon" style="font-size: 3rem; margin-bottom: 1rem;">
+                                <span data-feather="upload"></span>
+                            </div>
+                            <p>Klik untuk mengunggah foto atau seret ke sini</p>
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        </div>
+                        
+                        <p>Atau coba dengan gambar contoh:</p>
+                        <div class="sample-images">
+                            <div class="sample-image" data-sample="sample1">
+                                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%232F8F4E'/><circle cx='50' cy='50' r='30' fill='%23F6C85F'/></svg>" alt="Contoh tanaman sehat">
+                            </div>
+                            <div class="sample-image" data-sample="sample2">
+                                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23267a41'/><path d='M20,20 L80,80 M80,20 L20,80' stroke='%23E67E22' stroke-width='5'/></svg>" alt="Contoh tanaman sakit">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="loading-spinner" id="diagnosis-loading">
+                        <div class="spinner"></div>
+                        <p>Menganalisis gambar...</p>
+                    </div>
+                    
+                    <div class="card diagnosis-result" id="diagnosis-result">
+                        <h3>Hasil Diagnosa</h3>
+                        <div id="diagnosis-details">
+                            <!-- Diagnosis details will be populated by JavaScript -->
+                        </div>
+                        <button class="btn-primary" style="margin-top: 1rem;">Lihat Panduan</button>
+                    </div>
+                </div>
+                
+                <!-- Marketplace Section -->
+                <div class="demo-section" id="marketplace-section">
+                    <h2>Pasar Panen</h2>
+                    
+                    <button class="btn-primary" id="sell-product-btn" style="width: 100%; margin-bottom: 1rem;">Jual Hasil Panen Saya</button>
+                    
+                    <div class="products-grid" id="products-grid">
+                        <!-- Products will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Kalender Section -->
+                <div class="demo-section" id="kalender-section">
+                    <h2>Kalender Tanam</h2>
+                    
+                    <div class="card">
+                        <div class="calendar-header">
+                            <h3 id="current-month">Oktober 2023</h3>
+                            <div class="calendar-nav">
+                                <button class="btn-secondary" id="prev-month">
+                                    <span data-feather="chevron-left"></span>
+                                </button>
+                                <button class="btn-secondary" id="next-month">
+                                    <span data-feather="chevron-right"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="calendar" id="calendar">
+                            <!-- Calendar will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Notifikasi</h3>
+                        <p>Pemupukan tanaman cabai direncanakan pada 15 Oktober 2025</p>
+                        <button class="btn-secondary" style="margin-top: 0.5rem;">Atur Pengingat</button>
+                    </div>
+                </div>
+                
+                <!-- Forum Section -->
+                <div class="demo-section" id="forum-section">
+                    <h2>Forum Tani</h2>
+                    
+                    <div class="forum-posts" id="forum-posts">
+                        <!-- Forum posts will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Ajukan Pertanyaan</h3>
+                        <div class="form-group">
+                            <label for="question-title">Judul Pertanyaan</label>
+                            <input type="text" id="question-title" placeholder="Misal: Cara mengatasi hama aphid">
+                        </div>
+                        <div class="form-group">
+                            <label for="question-content">Isi Pertanyaan</label>
+                            <textarea id="question-content" rows="3" placeholder="Jelaskan masalah Anda secara detail"></textarea>
+                        </div>
+                        <button class="btn-primary" id="submit-question">Kirim Pertanyaan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Selling Product -->
+    <div class="modal" id="sell-product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Jual Hasil Panen</h3>
+                <button class="close-modal" aria-label="Tutup modal">
+                    <span data-feather="x"></span>
+                </button>
+            </div>
+            <div class="form-group">
+                <label for="product-name">Nama Produk</label>
+                <input type="text" id="product-name" placeholder="Misal: Cabai Merah">
+            </div>
+            <div class="form-group">
+                <label for="product-weight">Berat (kg)</label>
+                <input type="number" id="product-weight" placeholder="Misal: 5">
+            </div>
+            <div class="form-group">
+                <label for="product-price">Harga per kg (Rp)</label>
+                <input type="number" id="product-price" placeholder="Misal: 60000">
+            </div>
+            <div class="form-group">
+                <label for="product-image">Foto Produk</label>
+                <input type="file" id="product-image" accept="image/*">
+                <div class="image-preview" id="image-preview">
+                    <img id="preview-img" src="" alt="Preview gambar">
+                </div>
+            </div>
+            <button class="btn-primary" id="submit-product" style="width: 100%;">Terbitkan Penawaran</button>
+        </div>
+    </div>
+
+    <script>
+        // Data Dummy
+        const dummyData = {
+            village: "Desa Sukamaju",
+            weather: {
+                today: "Hujan",
+                temp: 24,
+                forecast: ["Hujan", "Hujan ringan", "Cerah"]
+            },
+            tasks: [
+                { id: 1, text: "Pemupukan Nitrogen", done: false },
+                { id: 2, text: "Penyiraman tanaman cabai", done: false },
+                { id: 3, text: "Pemeriksaan hama", done: true }
+            ],
+            diagnosisSamples: [
+                { id: "sample1", name: "Tanaman Sehat", recommendation: "Tanaman dalam kondisi baik. Lanjutkan perawatan rutin." },
+                { id: "sample2", name: "Aphid", recommendation: "Semprot larutan sabun alami; lihat panduan lengkap di fitur Scan & Sembuh." }
+            ],
+            products: [
+                { id: 1, name: "Cabai Merah", weight: "5 kg", price: 60000, rating: 4.5, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'><rect width='200' height='150' fill='%23E67E22'/><circle cx='100' cy='75' r='40' fill='%23F6C85F'/></svg>" },
+                { id: 2, name: "Padi", weight: "10 kg", price: 12000, rating: 4.2, image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'><rect width='200' height='150' fill='%232F8F4E'/><path d='M50,50 Q100,30 150,50 Q100,70 50,50' fill='%23F6C85F'/></svg>" }
+            ],
+            forumPosts: [
+                { id: 1, author: "Pak Budi", content: "Bagaimana cara mengatasi hama aphid pada tanaman cabai?", date: "2 hari lalu" },
+                { id: 2, author: "Ibu Siti", content: "Kapan waktu terbaik untuk menanam padi di musim hujan?", date: "5 hari lalu" }
+            ]
+        };
+
+        // Calendar Data
+        const months = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+        
+        let currentMonth = 9; // October (0-indexed)
+        let currentYear = 2023;
+
+        // State Management
+        let appState = {
+            currentSection: 'dashboard',
+            products: [],
+            forumPosts: [],
+            tasks: []
+        };
+
+        // DOM Elements
+        const landingPage = document.getElementById('landing-page');
+        const demoApp = document.getElementById('demo-app');
+        const tryDemoBtn = document.getElementById('try-demo');
+        const ctaDemoBtn = document.getElementById('cta-demo');
+        const backToLandingBtn = document.getElementById('back-to-landing');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        const navItems = document.querySelectorAll('.nav-item');
+        const demoSections = document.querySelectorAll('.demo-section');
+        const featureBtns = document.querySelectorAll('.feature-btn');
+        const sellProductBtn = document.getElementById('sell-product-btn');
+        const sellProductModal = document.getElementById('sell-product-modal');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const submitProductBtn = document.getElementById('submit-product');
+        const uploadArea = document.getElementById('upload-area');
+        const imageUpload = document.getElementById('image-upload');
+        const sampleImages = document.querySelectorAll('.sample-image');
+        const diagnosisResult = document.getElementById('diagnosis-result');
+        const diagnosisLoading = document.getElementById('diagnosis-loading');
+        const submitQuestionBtn = document.getElementById('submit-question');
+        const themeToggle = document.getElementById('theme-toggle');
+        const productImageInput = document.getElementById('product-image');
+        const imagePreview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const currentMonthEl = document.getElementById('current-month');
+
+        // Initialize App
+        function initApp() {
+            // Load data from localStorage or use dummy data
+            appState.products = JSON.parse(localStorage.getItem('products')) || dummyData.products;
+            appState.forumPosts = JSON.parse(localStorage.getItem('forumPosts')) || dummyData.forumPosts;
+            appState.tasks = JSON.parse(localStorage.getItem('tasks')) || dummyData.tasks;
+            
+            // Check for dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<span data-feather="sun"></span>';
+            }
+            
+            // Render initial data
+            renderDashboard();
+            renderMarketplace();
+            renderForum();
+            renderCalendar();
+            
+            // Set village and weather info
+            document.getElementById('village-name').textContent = dummyData.village;
+            document.getElementById('weather-info').textContent = `${dummyData.weather.today}, ${dummyData.weather.temp}°C`;
+            
+            // Initialize Feather Icons
+            feather.replace();
+        }
+
+        // Navigation Functions
+        function showDemoApp() {
+            landingPage.style.display = 'none';
+            demoApp.style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function showLandingPage() {
+            demoApp.style.display = 'none';
+            landingPage.style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function switchSection(sectionId) {
+            // Update active nav item
+            navItems.forEach(item => {
+                if (item.getAttribute('data-section') === sectionId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Show active section
+            demoSections.forEach(section => {
+                if (section.id === `${sectionId}-section`) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            
+            appState.currentSection = sectionId;
+            
+            // Update Feather Icons for newly visible content
+            feather.replace();
+        }
+
+        // Render Functions
+        function renderDashboard() {
+            const tasksList = document.getElementById('tasks-list');
+            tasksList.innerHTML = '';
+            
+            appState.tasks.forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.className = `task-item ${task.done ? 'task-done' : ''}`;
+                taskItem.innerHTML = `
+                    <span>${task.text}</span>
+                    <button class="btn-secondary mark-task-done" data-task-id="${task.id}">
+                        ${task.done ? '<span data-feather="check"></span> Selesai' : 'Tandai Selesai'}
+                    </button>
+                `;
+                tasksList.appendChild(taskItem);
+            });
+            
+            // Add event listeners to mark task buttons
+            document.querySelectorAll('.mark-task-done').forEach(button => {
+                button.addEventListener('click', function() {
+                    const taskId = parseInt(this.getAttribute('data-task-id'));
+                    markTaskDone(taskId);
+                });
+            });
+            
+            // Update Feather Icons
+            feather.replace();
+        }
+
+        function renderMarketplace() {
+            const productsGrid = document.getElementById('products-grid');
+            productsGrid.innerHTML = '';
+            
+            appState.products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // Generate star rating
+                let starsHtml = '';
+                const fullStars = Math.floor(product.rating);
+                const hasHalfStar = product.rating % 1 !== 0;
+                
+                for (let i = 0; i < fullStars; i++) {
+                    starsHtml += '<span class="star">★</span>';
+                }
+                
+                if (hasHalfStar) {
+                    starsHtml += '<span class="star">★</span>';
+                }
+                
+                const emptyStars = 5 - Math.ceil(product.rating);
+                for (let i = 0; i < emptyStars; i++) {
+                    starsHtml += '<span class="star" style="color: #ccc">★</span>';
+                }
+                
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${p.jpg}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-rating">
+                            ${starsHtml} <span style="margin-left: 5px;">${product.rating}</span>
+                        </div>
+                        <div class="product-details">
+                            <span>${product.weight}</span>
+                            <span>Rp ${product.price.toLocaleString()}/kg</span>
+                        </div>
+                        <button class="btn-secondary" style="width: 100%;">Beli</button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+
+        function renderForum() {
+            const forumPosts = document.getElementById('forum-posts');
+            forumPosts.innerHTML = '';
+            
+            appState.forumPosts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'forum-post';
+                
+                // Get first letter for avatar
+                const avatarLetter = post.author.charAt(0);
+                
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-avatar">${avatarLetter}</div>
+                        <div>
+                            <div class="post-author">${post.author}</div>
+                            <div class="post-date" style="font-size: 0.8rem; color: #666;">${post.date}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                `;
+                forumPosts.appendChild(postElement);
+            });
+        }
+
+        function renderCalendar() {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            // Update current month display
+            currentMonthEl.textContent = `${months[currentMonth]} ${currentYear}`;
+            
+            // Simple calendar for the current month
+            const days = ['M', 'S', 'S', 'R', 'K', 'J', 'S'];
+            days.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.textContent = day;
+                dayHeader.style.fontWeight = 'bold';
+                dayHeader.style.textAlign = 'center';
+                calendar.appendChild(dayHeader);
+            });
+            
+            // Get first day of the month (0 = Sunday, 1 = Monday, etc.)
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            // Adjust for Monday as first day (0 = Monday)
+            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1;
+            
+            // Add empty cells for days before the 1st
+            for (let i = 0; i < adjustedFirstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                calendar.appendChild(emptyDay);
+            }
+            
+            // Get number of days in the month
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                // Check if this is today (for demo purposes, we'll use 15th)
+                if (day === 15 && currentMonth === 9 && currentYear === 2023) {
+                    dayElement.classList.add('current');
+                }
+                
+                dayElement.innerHTML = `<div>${day}</div>`;
+                
+                // Add tasks for specific days
+                if (day === 5) {
+                    dayElement.innerHTML += '<div class="calendar-task">Pemupukan</div>';
+                }
+                if (day === 15) {
+                    dayElement.innerHTML += '<div class="calendar-task">Panen</div>';
+                }
+                if (day === 22) {
+                    dayElement.innerHTML += '<div class="calendar-task">Penyiraman</div>';
+                }
+                
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        // Task Management
+        function markTaskDone(taskId) {
+            appState.tasks = appState.tasks.map(task => {
+                if (task.id === taskId) {
+                    return { ...task, done: !task.done };
+                }
+                return task;
+            });
+            
+            localStorage.setItem('tasks', JSON.stringify(appState.tasks));
+            renderDashboard();
+        }
+
+        // Product Management
+        function addProduct(productData) {
+            const newProduct = {
+                id: appState.products.length + 1,
+                rating: (Math.random() * 1 + 4).toFixed(1), // Random rating between 4.0 and 5.0
+                ...productData
+            };
+            
+            appState.products.push(newProduct);
+            localStorage.setItem('products', JSON.stringify(appState.products));
+            renderMarketplace();
+        }
+
+        // Forum Management
+        function addForumPost(postData) {
+            const newPost = {
+                id: appState.forumPosts.length + 1,
+                ...postData,
+                date: 'Baru saja'
+            };
+            
+            appState.forumPosts.unshift(newPost);
+            localStorage.setItem('forumPosts', JSON.stringify(appState.forumPosts));
+            renderForum();
+        }
+
+        // Diagnosis Simulation
+        function simulateDiagnosis(sampleId) {
+            // Show loading state
+            diagnosisResult.style.display = 'none';
+            diagnosisLoading.style.display = 'block';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                diagnosisLoading.style.display = 'none';
+                
+                const sample = dummyData.diagnosisSamples.find(s => s.id === sampleId) || 
+                              dummyData.diagnosisSamples[1]; // Default to aphid
+                
+                diagnosisResult.style.display = 'block';
+                diagnosisResult.innerHTML = `
+                    <h3>Hasil Diagnosa</h3>
+                    <p><strong>Terdeteksi:</strong> ${sample.name}</p>
+                    <p><strong>Rekomendasi:</strong> ${sample.recommendation}</p>
+                    <button class="btn-primary" style="margin-top: 1rem;">Lihat Panduan</button>
+                `;
+            }, 2000);
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                themeToggle.innerHTML = '<span data-feather="sun"></span>';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                themeToggle.innerHTML = '<span data-feather="moon"></span>';
+            }
+            
+            feather.replace();
+        }
+
+        // Calendar Navigation
+        function changeMonth(direction) {
+            currentMonth += direction;
+            
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            
+            renderCalendar();
+        }
+
+        // Image Preview
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Event Listeners
+        tryDemoBtn.addEventListener('click', showDemoApp);
+        ctaDemoBtn.addEventListener('click', showDemoApp);
+        backToLandingBtn.addEventListener('click', showLandingPage);
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            feather.replace();
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.getAttribute('data-section');
+                switchSection(section);
+            });
+        });
+
+        featureBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const section = btn.getAttribute('data-section');
+                switchSection(section);
+            });
+        });
+
+        sellProductBtn.addEventListener('click', () => {
+            sellProductModal.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            sellProductModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === sellProductModal) {
+                sellProductModal.style.display = 'none';
+            }
+        });
+
+        submitProductBtn.addEventListener('click', () => {
+            const name = document.getElementById('product-name').value;
+            const weight = document.getElementById('product-weight').value;
+            const price = parseInt(document.getElementById('product-price').value);
+            
+            if (name && weight && price) {
+                addProduct({
+                    name,
+                    weight: `${weight} kg`,
+                    price,
+                    image: "data:image/svg+xml;utf8,<svg xmlns='p.jpg' width='200' height='150' viewBox='0 0 200 150'><rect width='200' height='150' fill='%232F8F4E'/><circle cx='100' cy='75' r='40' fill='%23F6C85F'/></svg>"
+                });
+                
+                // Reset form
+                document.getElementById('product-name').value = '';
+                document.getElementById('product-weight').value = '';
+                document.getElementById('product-price').value = '';
+                imagePreview.style.display = 'none';
+                productImageInput.value = '';
+                
+                // Close modal
+                sellProductModal.style.display = 'none';
+                
+                // Switch to marketplace section
+                switchSection('marketplace');
+            } else {
+                alert('Harap isi semua field!');
+            }
+        });
+
+        uploadArea.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // For demo purposes, we'll just simulate diagnosis with sample2 (aphid)
+                    simulateDiagnosis('sample2');
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        sampleImages.forEach(image => {
+            image.addEventListener('click', () => {
+                const sampleId = image.getAttribute('data-sample');
+                simulateDiagnosis(sampleId);
+            });
+        });
+
+        submitQuestionBtn.addEventListener('click', () => {
+            const title = document.getElementById('question-title').value;
+            const content = document.getElementById('question-content').value;
+            
+            if (title && content) {
+                addForumPost({
+                    author: "Anda",
+                    content: `<strong>${title}</strong><br>${content}`
+                });
+                
+                // Reset form
+                document.getElementById('question-title').value = '';
+                document.getElementById('question-content').value = '';
+            } else {
+                alert('Harap isi judul dan isi pertanyaan!');
+            }
+        });
+
+        themeToggle.addEventListener('click', toggleDarkMode);
+        
+        prevMonthBtn.addEventListener('click', () => changeMonth(-1));
+        nextMonthBtn.addEventListener('click', () => changeMonth(1));
+        
+        productImageInput.addEventListener('change', previewImage);
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
